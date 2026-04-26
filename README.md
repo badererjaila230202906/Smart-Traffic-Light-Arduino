@@ -133,8 +133,253 @@ This makes the traffic light system adaptive because the green time changes base
 
 ## Arduino Code
 
-cpp // Smart Traffic Light System using Arduino Uno // 4-Lane Intersection with Potentiometer-Based Smart Logic  // Lane 1 int G1 = 2; int Y1 = 3; int R1 = 4;  // Lane 2 int G2 = 5; int Y2 = 6; int R2 = 7;  // Lane 3 int G3 = 8; int Y3 = 9; int R3 = 10;  // Lane 4 int G4 = 11; int Y4 = 12; int R4 = 13;  // Potentiometer input pin int sensorPin = A0;  // Timing values int lane1GreenTime; int yellowTime = 4000;      // Yellow light duration = 4 seconds int normalGreenTime = 4000; // Other lanes green duration = 4 seconds  void setup() {   // Set all traffic light pins as output   pinMode(G1, OUTPUT);   pinMode(Y1, OUTPUT);   pinMode(R1, OUTPUT);    pinMode(G2, OUTPUT);   pinMode(Y2, OUTPUT);   pinMode(R2, OUTPUT);    pinMode(G3, OUTPUT);   pinMode(Y3, OUTPUT);   pinMode(R3, OUTPUT);    pinMode(G4, OUTPUT);   pinMode(Y4, OUTPUT);   pinMode(R4, OUTPUT); }  // This function turns off all lights before each cycle void allOff() {   digitalWrite(G1, LOW);   digitalWrite(Y1, LOW);   digitalWrite(R1, LOW);    digitalWrite(G2, LOW);   digitalWrite(Y2, LOW);   digitalWrite(R2, LOW);    digitalWrite(G3, LOW);   digitalWrite(Y3, LOW);   digitalWrite(R3, LOW);    digitalWrite(G4, LOW);   digitalWrite(Y4, LOW);   digitalWrite(R4, LOW); }  void loop() {   // Read potentiometer value from A0   int sensorValue = analogRead(sensorPin);    // Smart decision-making for Lane 1 green duration   if (sensorValue < 400) {     lane1GreenTime = 3000; // Low traffic: 3 seconds   }   else if (sensorValue < 700) {     lane1GreenTime = 5000; // Medium traffic: 5 seconds   }   else {     lane1GreenTime = 8000; // Heavy traffic: 8 seconds   }    // Cycle 1: Lane 1 Green, all other lanes Red   allOff();   digitalWrite(G1, HIGH);   digitalWrite(R2, HIGH);   digitalWrite(R3, HIGH);   digitalWrite(R4, HIGH);   delay(lane1GreenTime);    // Cycle 2: Lane 1 Yellow transition   allOff();   digitalWrite(Y1, HIGH);   digitalWrite(R2, HIGH);   digitalWrite(R3, HIGH);   digitalWrite(R4, HIGH);   delay(yellowTime);    // Cycle 3: Lane 2 Green, all other lanes Red   allOff();   digitalWrite(R1, HIGH);   digitalWrite(G2, HIGH);   digitalWrite(R3, HIGH);   digitalWrite(R4, HIGH);   delay(normalGreenTime);    // Cycle 4: Lane 2 Yellow transition   allOff();   digitalWrite(R1, HIGH);   digitalWrite(Y2, HIGH);   digitalWrite(R3, HIGH);   digitalWrite(R4, HIGH);   delay(yellowTime);    // Cycle 5: Lane 3 Green, all other lanes Red   allOff();   digitalWrite(R1, HIGH);   digitalWrite(R2, HIGH);   digitalWrite(G3, HIGH);   digitalWrite(R4, HIGH);   delay(normalGreenTime);    // Cycle 6: Lane 3 Yellow transition   allOff();   digitalWrite(R1, HIGH);   digitalWrite(R2, HIGH);   digitalWrite(Y3, HIGH);   digitalWrite(R4, HIGH);   delay(yellowTime);    // Cycle 7: Lane 4 Green, all other lanes Red   allOff();   digitalWrite(R1, HIGH);   digitalWrite(R2, HIGH);   digitalWrite(R3, HIGH);   digitalWrite(G4, HIGH);   delay(normalGreenTime);    // Cycle 8: Lane 4 Yellow transition   allOff();   digitalWrite(R1, HIGH);   digitalWrite(R2, HIGH);   digitalWrite(R3, HIGH);   digitalWrite(Y4, HIGH);   delay(yellowTime); } 
+// Smart Traffic Light System using Arduino Uno
 
+// 4-Lane Intersection with Potentiometer-Based Smart Logic
+
+// Lane 1
+
+int G1 = 2;
+
+int Y1 = 3;
+
+int R1 = 4;
+
+// Lane 2
+
+int G2 = 5;
+
+int Y2 = 6;
+
+int R2 = 7;
+
+// Lane 3
+
+int G3 = 8;
+
+int Y3 = 9;
+
+int R3 = 10;
+
+// Lane 4
+
+int G4 = 11;
+
+int Y4 = 12;
+
+int R4 = 13;
+
+// Potentiometer input pin
+
+int sensorPin = A0;
+
+// Timing values
+
+int lane1GreenTime;
+
+int yellowTime = 4000;      // Yellow light duration = 4 seconds
+
+int normalGreenTime = 4000; // Other lanes green duration = 4 seconds
+
+void setup() {
+
+  // Set all traffic light pins as output
+
+  pinMode(G1, OUTPUT);
+
+  pinMode(Y1, OUTPUT);
+
+  pinMode(R1, OUTPUT);
+
+  pinMode(G2, OUTPUT);
+
+  pinMode(Y2, OUTPUT);
+
+  pinMode(R2, OUTPUT);
+
+  pinMode(G3, OUTPUT);
+
+  pinMode(Y3, OUTPUT);
+
+  pinMode(R3, OUTPUT);
+
+  pinMode(G4, OUTPUT);
+
+  pinMode(Y4, OUTPUT);
+
+  pinMode(R4, OUTPUT);
+
+}
+
+// This function turns off all lights before each cycle
+
+void allOff() {
+
+  digitalWrite(G1, LOW);
+
+  digitalWrite(Y1, LOW);
+
+  digitalWrite(R1, LOW);
+
+  digitalWrite(G2, LOW);
+
+  digitalWrite(Y2, LOW);
+
+  digitalWrite(R2, LOW);
+
+  digitalWrite(G3, LOW);
+
+  digitalWrite(Y3, LOW);
+
+  digitalWrite(R3, LOW);
+
+  digitalWrite(G4, LOW);
+
+  digitalWrite(Y4, LOW);
+
+  digitalWrite(R4, LOW);
+
+}
+
+void loop() {
+
+  // Read potentiometer value from A0
+
+  int sensorValue = analogRead(sensorPin);
+
+  // Smart decision-making for Lane 1 green duration
+
+  if (sensorValue < 400) {
+
+    lane1GreenTime = 3000; // Low traffic: 3 seconds
+
+  }
+
+  else if (sensorValue < 700) {
+
+    lane1GreenTime = 5000; // Medium traffic: 5 seconds
+
+  }
+
+  else {
+
+    lane1GreenTime = 8000; // Heavy traffic: 8 seconds
+
+  }
+
+  // Cycle 1: Lane 1 Green, all other lanes Red
+
+  allOff();
+
+  digitalWrite(G1, HIGH);
+
+  digitalWrite(R2, HIGH);
+
+  digitalWrite(R3, HIGH);
+
+  digitalWrite(R4, HIGH);
+
+  delay(lane1GreenTime);
+
+  // Cycle 2: Lane 1 Yellow transition
+
+  allOff();
+
+  digitalWrite(Y1, HIGH);
+
+  digitalWrite(R2, HIGH);
+
+  digitalWrite(R3, HIGH);
+
+  digitalWrite(R4, HIGH);
+
+  delay(yellowTime);
+
+  // Cycle 3: Lane 2 Green, all other lanes Red
+
+  allOff();
+
+  digitalWrite(R1, HIGH);
+
+  digitalWrite(G2, HIGH);
+
+  digitalWrite(R3, HIGH);
+
+  digitalWrite(R4, HIGH);
+
+  delay(normalGreenTime);
+
+  // Cycle 4: Lane 2 Yellow transition
+
+  allOff();
+
+  digitalWrite(R1, HIGH);
+
+  digitalWrite(Y2, HIGH);
+
+  digitalWrite(R3, HIGH);
+
+  digitalWrite(R4, HIGH);
+
+  delay(yellowTime);
+
+  // Cycle 5: Lane 3 Green, all other lanes Red
+
+  allOff();
+
+  digitalWrite(R1, HIGH);
+
+  digitalWrite(R2, HIGH);
+
+  digitalWrite(G3, HIGH);
+
+  digitalWrite(R4, HIGH);
+
+  delay(normalGreenTime);
+
+  // Cycle 6: Lane 3 Yellow transition
+
+  allOff();
+
+  digitalWrite(R1, HIGH);
+
+  digitalWrite(R2, HIGH);
+
+  digitalWrite(Y3, HIGH);
+
+  digitalWrite(R4, HIGH);
+
+  delay(yellowTime);
+
+  // Cycle 7: Lane 4 Green, all other lanes Red
+
+  allOff();
+
+  digitalWrite(R1, HIGH);
+
+  digitalWrite(R2, HIGH);
+
+  digitalWrite(R3, HIGH);
+
+  digitalWrite(G4, HIGH);
+
+  delay(normalGreenTime);
+
+  // Cycle 8: Lane 4 Yellow transition
+
+  allOff();
+
+  digitalWrite(R1, HIGH);
+
+  digitalWrite(R2, HIGH);
+
+  digitalWrite(R3, HIGH);
+
+  digitalWrite(Y4, HIGH);
+
+  delay(yellowTime);
+
+}
 ---
 
 ## Code Summary
