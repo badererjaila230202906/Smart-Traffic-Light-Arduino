@@ -123,9 +123,9 @@ The Arduino reads the potentiometer value from A0.
 
 The value range is from 0 to 1023:
 
-- Low value: no vehicles → Lane 1 green time = 3 seconds
-- Medium value: normal traffic → Lane 1 green time = 5 seconds
-- High value: heavy traffic → Lane 1 green time = 8 seconds
+- Low value: no vehicles → Lanes green time = 3 seconds
+- Medium value: normal traffic → Lanes green time = 5 seconds
+- High value: heavy traffic → Lanes green time = 8 seconds
 
 This makes the traffic light system adaptive because the green time changes based on the simulated traffic condition.
 
@@ -133,9 +133,7 @@ This makes the traffic light system adaptive because the green time changes base
 
 ## Arduino Code
 
-// Smart Traffic Light System using Arduino Uno
-
-// 4-Lane Intersection with Potentiometer-Based Smart Logic
+// Smart Traffic Light System - All Lanes Smart
 
 // Lane 1
 
@@ -169,105 +167,65 @@ int Y4 = 12;
 
 int R4 = 13;
 
-// Potentiometer input pin
+// Potentiometer
 
 int sensorPin = A0;
 
-// Timing values
+// Timing
 
-int lane1GreenTime;
+int greenTime;
 
-int yellowTime = 4000;      // Yellow light duration = 4 seconds
-
-int normalGreenTime = 4000; // Other lanes green duration = 4 seconds
+int yellowTime = 4000;
 
 void setup() {
 
-  // Set all traffic light pins as output
+  pinMode(G1, OUTPUT); pinMode(Y1, OUTPUT); pinMode(R1, OUTPUT);
 
-  pinMode(G1, OUTPUT);
+  pinMode(G2, OUTPUT); pinMode(Y2, OUTPUT); pinMode(R2, OUTPUT);
 
-  pinMode(Y1, OUTPUT);
+  pinMode(G3, OUTPUT); pinMode(Y3, OUTPUT); pinMode(R3, OUTPUT);
 
-  pinMode(R1, OUTPUT);
-
-  pinMode(G2, OUTPUT);
-
-  pinMode(Y2, OUTPUT);
-
-  pinMode(R2, OUTPUT);
-
-  pinMode(G3, OUTPUT);
-
-  pinMode(Y3, OUTPUT);
-
-  pinMode(R3, OUTPUT);
-
-  pinMode(G4, OUTPUT);
-
-  pinMode(Y4, OUTPUT);
-
-  pinMode(R4, OUTPUT);
+  pinMode(G4, OUTPUT); pinMode(Y4, OUTPUT); pinMode(R4, OUTPUT);
 
 }
 
-// This function turns off all lights before each cycle
-
 void allOff() {
 
-  digitalWrite(G1, LOW);
+  digitalWrite(G1, LOW); digitalWrite(Y1, LOW); digitalWrite(R1, LOW);
 
-  digitalWrite(Y1, LOW);
+  digitalWrite(G2, LOW); digitalWrite(Y2, LOW); digitalWrite(R2, LOW);
 
-  digitalWrite(R1, LOW);
+  digitalWrite(G3, LOW); digitalWrite(Y3, LOW); digitalWrite(R3, LOW);
 
-  digitalWrite(G2, LOW);
-
-  digitalWrite(Y2, LOW);
-
-  digitalWrite(R2, LOW);
-
-  digitalWrite(G3, LOW);
-
-  digitalWrite(Y3, LOW);
-
-  digitalWrite(R3, LOW);
-
-  digitalWrite(G4, LOW);
-
-  digitalWrite(Y4, LOW);
-
-  digitalWrite(R4, LOW);
+  digitalWrite(G4, LOW); digitalWrite(Y4, LOW); digitalWrite(R4, LOW);
 
 }
 
 void loop() {
 
-  // Read potentiometer value from A0
-
   int sensorValue = analogRead(sensorPin);
 
-  // Smart decision-making for Lane 1 green duration
+  // Smart timing for ALL lanes
 
   if (sensorValue < 400) {
 
-    lane1GreenTime = 3000; // Low traffic: 3 seconds
+    greenTime = 3000;
 
   }
 
   else if (sensorValue < 700) {
 
-    lane1GreenTime = 5000; // Medium traffic: 5 seconds
+    greenTime = 5000;
 
   }
 
   else {
 
-    lane1GreenTime = 8000; // Heavy traffic: 8 seconds
+    greenTime = 8000;
 
   }
 
-  // Cycle 1: Lane 1 Green, all other lanes Red
+  // Lane 1
 
   allOff();
 
@@ -279,9 +237,7 @@ void loop() {
 
   digitalWrite(R4, HIGH);
 
-  delay(lane1GreenTime);
-
-  // Cycle 2: Lane 1 Yellow transition
+  delay(greenTime);
 
   allOff();
 
@@ -295,7 +251,7 @@ void loop() {
 
   delay(yellowTime);
 
-  // Cycle 3: Lane 2 Green, all other lanes Red
+  // Lane 2
 
   allOff();
 
@@ -307,9 +263,7 @@ void loop() {
 
   digitalWrite(R4, HIGH);
 
-  delay(normalGreenTime);
-
-  // Cycle 4: Lane 2 Yellow transition
+  delay(greenTime);
 
   allOff();
 
@@ -323,7 +277,7 @@ void loop() {
 
   delay(yellowTime);
 
-  // Cycle 5: Lane 3 Green, all other lanes Red
+  // Lane 3
 
   allOff();
 
@@ -335,9 +289,7 @@ void loop() {
 
   digitalWrite(R4, HIGH);
 
-  delay(normalGreenTime);
-
-  // Cycle 6: Lane 3 Yellow transition
+  delay(greenTime);
 
   allOff();
 
@@ -351,7 +303,7 @@ void loop() {
 
   delay(yellowTime);
 
-  // Cycle 7: Lane 4 Green, all other lanes Red
+  // Lane 4
 
   allOff();
 
@@ -363,9 +315,7 @@ void loop() {
 
   digitalWrite(G4, HIGH);
 
-  delay(normalGreenTime);
-
-  // Cycle 8: Lane 4 Yellow transition
+  delay(greenTime);
 
   allOff();
 
@@ -386,7 +336,7 @@ void loop() {
 
 The code works by turning on one lane at a time while keeping the other lanes red. Before switching to the next lane, the yellow light turns on for 4 seconds as a transition signal.
 
-The smart part of the system is applied to Lane 1. The potentiometer value controls how long Lane 1 stays green:
+The smart part of the system is applied to Lanes. The potentiometer value controls how long Lanes stays green:
 
 - Low potentiometer value → 3 seconds
 - Medium potentiometer value → 5 seconds
