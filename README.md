@@ -47,3 +47,5 @@ In this stage of the project, I have designed the road layout for a four-way int
 The intersection was carefully structured to represent a realistic crossroad scenario, allowing multiple traffic directions. I have also organized and visually enhanced the layout to clearly distinguish the roads and lanes, which will help in placing and controlling the traffic signals in the next stages.
 
 This design will serve as the foundation for implementing the traffic lights, sensors, and smart control logic.
+<img width="4284" height="5712" alt="image" src="https://github.com/user-attachments/assets/74c70e44-b6ce-4e53-b44f-cc686e1b391e" />
+
