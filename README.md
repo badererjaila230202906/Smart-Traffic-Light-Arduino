@@ -48,4 +48,34 @@ The intersection was carefully structured to represent a realistic crossroad sce
 
 This design will serve as the foundation for implementing the traffic lights, sensors, and smart control logic.
 <img width="4284" height="5712" alt="image" src="https://github.com/user-attachments/assets/74c70e44-b6ce-4e53-b44f-cc686e1b391e" />
+Implementation Update
+
+After setting up the Arduino Uno and connecting all four traffic light modules, the system was tested successfully using Proteus simulation.
+
+Since the HC-SR04 ultrasonic sensor was not available in the Proteus library, a potentiometer (POT-HG) was used as an alternative to simulate vehicle detection.
+
+The potentiometer is connected as follows:
+
+* One terminal → VCC
+* One terminal → GND
+* Middle terminal → A0 (analog input of Arduino)
+
+⸻
+
+🧠 Smart Behavior
+
+The potentiometer simulates traffic density by providing a variable analog value (0–1023):
+
+* When the potentiometer is rotated down (low value)
+    → Represents no vehicles
+    → Green light duration = 3 seconds
+* When the potentiometer is in the middle
+    → Represents moderate traffic
+    → Green light duration = 5 seconds
+* When the potentiometer is rotated up (high value)
+    → Represents heavy traffic
+    → Green light duration = 8 seconds
+
+This allows the system to dynamically adjust the green light duration based on traffic conditions, making the system smart and adaptive.
+<img width="3024" height="4032" alt="image" src="https://github.com/user-attachments/assets/45ba2e10-af1e-4a99-bbbd-90e1bdcc8a57" />
 
