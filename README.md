@@ -40,3 +40,10 @@ The same circuit can be implemented on real hardware using Arduino Uno and the l
 ## Author
 Bader Erjaila  
 Student ID: 230202906
+Project Progress Update
+
+In this stage of the project, I have designed the road layout for a four-way intersection to support the implementation of a smart traffic light system.
+
+The intersection was carefully structured to represent a realistic crossroad scenario, allowing multiple traffic directions. I have also organized and visually enhanced the layout to clearly distinguish the roads and lanes, which will help in placing and controlling the traffic signals in the next stages.
+
+This design will serve as the foundation for implementing the traffic lights, sensors, and smart control logic.
