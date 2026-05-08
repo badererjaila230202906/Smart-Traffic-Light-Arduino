@@ -1,346 +1,418 @@
-# Smart Traffic Light System using Arduino and Ultrasonic Sensor
-
-## Overview
-This project implements a smart traffic light control system using Arduino Uno and an ultrasonic sensor (HC-SR04). Unlike traditional traffic lights with fixed timing, this system adjusts the signal duration dynamically based on vehicle presence.
-
-## Objective
-The objective of this project is to improve traffic flow efficiency by adapting the duration of the traffic lights according to real-time conditions using sensor input.
-
-## Components
-- Arduino Uno
-- Ultrasonic Sensor (HC-SR04)
-- 3 LEDs (Red, Yellow, Green)
-- Resistors
-- Breadboard
-- Connecting wires
-
-## Working Principle
-The ultrasonic sensor continuously measures the distance between the sensor and approaching vehicles.
-
-- If a vehicle is detected (short distance):
-  - Green light duration increases to allow more cars to pass
-
-- If no vehicle is detected (long distance):
-  - Green light duration decreases
-
-- The system cycles between red, yellow, and green lights based on this logic
-
-## Features
-- Real-time vehicle detection
-- Dynamic traffic signal control
-- Efficient traffic flow simulation
-- Simple and cost-effective design
-
-## Simulation
-The system is designed and tested using Proteus simulation software.
-
-## Hardware Implementation
-The same circuit can be implemented on real hardware using Arduino Uno and the listed components.
-
 ## Author
 Bader Erjaila  
 Student ID: 230202906
 Project Progress Update
 
-In this stage of the project, I have designed the road layout for a four-way intersection to support the implementation of a smart traffic light system.
+# Smart Traffic Light System using Arduino and Ultrasonic SensorS
 
-The intersection was carefully structured to represent a realistic crossroad scenario, allowing multiple traffic directions. I have also organized and visually enhanced the layout to clearly distinguish the roads and lanes, which will help in placing and controlling the traffic signals in the next stages.
+## Overview
+This project implements a smart traffic light control system using Arduino Uno and ultrasonic sensors (HC-SR04). Unlike traditional traffic lights with fixed timing, this system dynamically adjusts the green light duration according to real-time traffic density. The system uses near and far sensors to detect normal traffic and congestion levels, allowing more efficient traffic management.
+## Objective
+The objective of this project is to improve traffic flow efficiency by adapting traffic light timing according to real-time traffic conditions. The system reduces unnecessary waiting time and gives priority to congested roads.
 
-This design will serve as the foundation for implementing the traffic lights, sensors, and smart control logic.
-<img width="4284" height="5712" alt="image" src="https://github.com/user-attachments/assets/74c70e44-b6ce-4e53-b44f-cc686e1b391e" />
-Implementation Update
+## Components
+• Arduino Uno
+• 4 HC-SR04 Ultrasonic Sensors
+• 4 Traffic Light Modules
+• Breadboard
+• Jumper Wires
+• USB Cable
 
-After setting up the Arduino Uno and connecting all four traffic light modules, the system was tested successfully using Proteus simulation.
+## Working Principle
+The system uses two ultrasonic sensors for each road:
+Near sensor: Detects normal vehicle presence and gives a shorter green light duration (7 seconds).
+Far sensor: Detects traffic congestion and gives a longer green light duration (12 seconds).
+If no vehicles are detected, all traffic lights remain red. The system also uses a priority mechanism and fairness logic using the variable lastServed.
 
-Since the HC-SR04 ultrasonic sensor was not available in the Proteus library, a potentiometer (POT-HG) was used as an alternative to simulate vehicle detection.
+## Features
+• Real-time vehicle detection using ultrasonic sensors
+• Dynamic traffic signal timing based on traffic density
+• Congestion priority system using far sensors
+• Fair traffic control using lastServed logic
+• Simple and cost-effective design
+• Reduced unnecessary waiting time
 
-The potentiometer is connected as follows:
 
-* One terminal → VCC
-* One terminal → GND
-* Middle terminal → A0 (analog input of Arduino)
+## Simulation
+The system is designed and tested using Proteus simulation software.
+<img width="317" height="345" alt="image" src="https://github.com/user-attachments/assets/8860afa1-9ecf-4530-98ce-d8101f0c10b6" />
 
-⸻
 
-🧠 Smart Behavior
-
-The potentiometer simulates traffic density by providing a variable analog value (0–1023):
-
-* When the potentiometer is rotated down (low value)
-    → Represents no vehicles
-    → Green light duration = 3 seconds
-* When the potentiometer is in the middle
-    → Represents moderate traffic
-    → Green light duration = 5 seconds
-* When the potentiometer is rotated up (high value)
-    → Represents heavy traffic
-    → Green light duration = 8 seconds
-
-This allows the system to dynamically adjust the green light duration based on traffic conditions, making the system smart and adaptive.
-<img width="3024" height="4032" alt="image" src="https://github.com/user-attachments/assets/45ba2e10-af1e-4a99-bbbd-90e1bdcc8a57" />
+## Hardware Implementation
+The hardware implementation was developed using Arduino Uno, HC-SR04 ultrasonic sensors, and traffic light modules. The system was connected using a breadboard and jumper wires. The same logic used in the simulation was successfully implemented on real hardware. 
+<img width="465" height="541" alt="image" src="https://github.com/user-attachments/assets/834a1d3f-bfce-401f-af3f-b045843b5be5" />
 
 
  Code Logic
  ## Arduino Code Explanation
 
-This code controls a 4-lane smart traffic light system using Arduino Uno.  
-Each lane has three lights: Green, Yellow, and Red.
+The Arduino program controls the entire Smart Traffic Light System by reading the ultrasonic sensor values and controlling the traffic light modules according to traffic density.
 
-The system also uses a potentiometer connected to analog pin A0. The potentiometer is used to simulate vehicle density instead of the ultrasonic sensor in Proteus.
+At the beginning of the program, all sensor pins and traffic light pins are defined using pinMode(). The ultrasonic sensors use TRIG pins as OUTPUT to send ultrasonic waves and ECHO pins as INPUT to receive the reflected signals.
+
+The function readSensor() is used to measure the distance between the sensor and vehicles. The measured distance is compared with a threshold value to determine whether a vehicle is detected or not.
+
+The system uses two sensors for each road:
+
+• Near sensor: Detects normal vehicle presence and gives a shorter green light duration (7 seconds).
+
+• Far sensor: Detects traffic congestion and gives a longer green light duration (12 seconds).
+
+The functions getLevel13() and getLevel24() determine the traffic density level for each road:
+
+• Level 0 → No vehicles detected
+
+• Level 1 → Near sensor active
+
+• Level 2 → Far sensor active (traffic congestion)
+
+The loop() function continuously checks traffic conditions and dynamically changes the traffic signal timing. If both roads contain vehicles, the system gives priority to the more congested road.
+
+The variable lastServed is used to prevent the same road from receiving green light repeatedly and to ensure fairness between roads.
+
+The functions open13() and open24() control the sequence of green, yellow, and red traffic lights for each road.
 
 ### Pin Connections
 
-Lane 1:
-- Green → Pin 2
-- Yellow → Pin 3
-- Red → Pin 4
+The Smart Traffic Light System uses Arduino Uno pins for both ultrasonic sensors and traffic light modules.
 
-Lane 2:
-- Green → Pin 5
-- Yellow → Pin 6
-- Red → Pin 7
+Ultrasonic Sensor Connections:
 
-Lane 3:
-- Green → Pin 8
-- Yellow → Pin 9
-- Red → Pin 10
+• Far Sensor Road 1/3
 
-Lane 4:
-- Green → Pin 11
-- Yellow → Pin 12
-- Red → Pin 13
+  - TRIG → Digital Pin 2
 
-Potentiometer:
-- One side → VCC
-- Other side → GND
-- Middle pin → A0
+  - ECHO → Digital Pin 3
 
----
+• Near Sensor Road 1/3
 
-## Smart Logic
+  - TRIG → Digital Pin 4
 
-The Arduino reads the potentiometer value from A0.
+  - ECHO → Digital Pin 5
 
-The value range is from 0 to 1023:
+• Far Sensor Road 2/4
 
-- Low value: no vehicles → Lanes green time = 3 seconds
-- Medium value: normal traffic → Lanes green time = 5 seconds
-- High value: heavy traffic → Lanes green time = 8 seconds
+  - TRIG → Digital Pin 6
 
-This makes the traffic light system adaptive because the green time changes based on the simulated traffic condition.
+  - ECHO → Digital Pin 7
 
----
+• Near Sensor Road 2/4
+
+  - TRIG → Digital Pin 8
+
+  - ECHO → Digital Pin 9
+
+Traffic Light Connections:
+
+• Road 1/3 Traffic Light
+
+  - Green LED → A0
+
+  - Yellow LED → A1
+
+  - Red LED → A2
+
+• Road 2/4 Traffic Light
+
+  - Green LED → A3
+
+  - Yellow LED → A4
+
+  - Red LED → A5
+
+Power Connections:
+
+• All VCC pins are connected to 5V.
+
+• All GND pins are connected to the common ground line on the breadboard.
+
 
 ## Arduino Code
 
-// Smart Traffic Light System - All Lanes Smart
+#define TRIG_FAR13 2
 
-// Lane 1
+#define ECHO_FAR13 3
 
-int G1 = 2;
+#define TRIG_NEAR13 4
 
-int Y1 = 3;
+#define ECHO_NEAR13 5
 
-int R1 = 4;
+#define TRIG_FAR24 6
 
-// Lane 2
+#define ECHO_FAR24 7
 
-int G2 = 5;
+#define TRIG_NEAR24 8
 
-int Y2 = 6;
+#define ECHO_NEAR24 9
 
-int R2 = 7;
+#define G13 A0
 
-// Lane 3
+#define Y13 A1
 
-int G3 = 8;
+#define R13 A2
 
-int Y3 = 9;
+#define G24 A3
 
-int R3 = 10;
+#define Y24 A4
 
-// Lane 4
+#define R24 A5
 
-int G4 = 11;
+int threshold = 15;
 
-int Y4 = 12;
+int lastServed = 0;   // 0 none, 13, 24
 
-int R4 = 13;
+long readSensor(int trig, int echo) {
 
-// Potentiometer
+  digitalWrite(trig, LOW);
 
-int sensorPin = A0;
+  delayMicroseconds(2);
 
-// Timing
+  digitalWrite(trig, HIGH);
 
-int greenTime;
+  delayMicroseconds(10);
 
-int yellowTime = 4000;
+  digitalWrite(trig, LOW);
 
-void setup() {
+  long duration = pulseIn(echo, HIGH, 30000);
 
-  pinMode(G1, OUTPUT); pinMode(Y1, OUTPUT); pinMode(R1, OUTPUT);
+  if (duration == 0) return 999;
 
-  pinMode(G2, OUTPUT); pinMode(Y2, OUTPUT); pinMode(R2, OUTPUT);
-
-  pinMode(G3, OUTPUT); pinMode(Y3, OUTPUT); pinMode(R3, OUTPUT);
-
-  pinMode(G4, OUTPUT); pinMode(Y4, OUTPUT); pinMode(R4, OUTPUT);
+  return duration * 0.034 / 2;
 
 }
 
-void allOff() {
+void setup() {
 
-  digitalWrite(G1, LOW); digitalWrite(Y1, LOW); digitalWrite(R1, LOW);
+  pinMode(TRIG_FAR13, OUTPUT);
 
-  digitalWrite(G2, LOW); digitalWrite(Y2, LOW); digitalWrite(R2, LOW);
+  pinMode(ECHO_FAR13, INPUT);
 
-  digitalWrite(G3, LOW); digitalWrite(Y3, LOW); digitalWrite(R3, LOW);
+  pinMode(TRIG_NEAR13, OUTPUT);
 
-  digitalWrite(G4, LOW); digitalWrite(Y4, LOW); digitalWrite(R4, LOW);
+  pinMode(ECHO_NEAR13, INPUT);
+
+  pinMode(TRIG_FAR24, OUTPUT);
+
+  pinMode(ECHO_FAR24, INPUT);
+
+  pinMode(TRIG_NEAR24, OUTPUT);
+
+  pinMode(ECHO_NEAR24, INPUT);
+
+  pinMode(G13, OUTPUT);
+
+  pinMode(Y13, OUTPUT);
+
+  pinMode(R13, OUTPUT);
+
+  pinMode(G24, OUTPUT);
+
+  pinMode(Y24, OUTPUT);
+
+  pinMode(R24, OUTPUT);
+
+  allRed();
 
 }
 
 void loop() {
 
-  int sensorValue = analogRead(sensorPin);
+  int L13 = getLevel13();
 
-  // Smart timing for ALL lanes
+  delay(100);
 
-  if (sensorValue < 400) {
+  int L24 = getLevel24();
 
-    greenTime = 3000;
+  delay(100);
 
-  }
+  if (L13 == 0 && L24 == 0) {
 
-  else if (sensorValue < 700) {
+    allRed();
 
-    greenTime = 5000;
+    lastServed = 0;
 
-  }
+    delay(500);
 
-  else {
-
-    greenTime = 8000;
+    return;
 
   }
 
-  // Lane 1
+  if (L13 > 0 && L24 > 0) {
 
-  allOff();
+    if (lastServed == 13) {
 
-  digitalWrite(G1, HIGH);
+      open24(timeFor(L24));
 
-  digitalWrite(R2, HIGH);
+      lastServed = 24;
 
-  digitalWrite(R3, HIGH);
+    }
 
-  digitalWrite(R4, HIGH);
+    else if (lastServed == 24) {
 
-  delay(greenTime);
+      open13(timeFor(L13));
 
-  allOff();
+      lastServed = 13;
 
-  digitalWrite(Y1, HIGH);
+    }
 
-  digitalWrite(R2, HIGH);
+    else {
 
-  digitalWrite(R3, HIGH);
+      if (L13 > L24) {
 
-  digitalWrite(R4, HIGH);
+        open13(timeFor(L13));
 
-  delay(yellowTime);
+        lastServed = 13;
 
-  // Lane 2
+      }
 
-  allOff();
+      else if (L24 > L13) {
 
-  digitalWrite(R1, HIGH);
+        open24(timeFor(L24));
 
-  digitalWrite(G2, HIGH);
+        lastServed = 24;
 
-  digitalWrite(R3, HIGH);
+      }
 
-  digitalWrite(R4, HIGH);
+      else {
 
-  delay(greenTime);
+        open13(timeFor(L13));
 
-  allOff();
+        lastServed = 13;
 
-  digitalWrite(R1, HIGH);
+      }
 
-  digitalWrite(Y2, HIGH);
+    }
 
-  digitalWrite(R3, HIGH);
+  }
 
-  digitalWrite(R4, HIGH);
+  else if (L13 > 0) {
 
-  delay(yellowTime);
+    open13(timeFor(L13));
 
-  // Lane 3
+    lastServed = 13;
 
-  allOff();
+  }
 
-  digitalWrite(R1, HIGH);
+  else if (L24 > 0) {
 
-  digitalWrite(R2, HIGH);
+    open24(timeFor(L24));
 
-  digitalWrite(G3, HIGH);
+    lastServed = 24;
 
-  digitalWrite(R4, HIGH);
+  }
 
-  delay(greenTime);
+  allRed();
 
-  allOff();
-
-  digitalWrite(R1, HIGH);
-
-  digitalWrite(R2, HIGH);
-
-  digitalWrite(Y3, HIGH);
-
-  digitalWrite(R4, HIGH);
-
-  delay(yellowTime);
-
-  // Lane 4
-
-  allOff();
-
-  digitalWrite(R1, HIGH);
-
-  digitalWrite(R2, HIGH);
-
-  digitalWrite(R3, HIGH);
-
-  digitalWrite(G4, HIGH);
-
-  delay(greenTime);
-
-  allOff();
-
-  digitalWrite(R1, HIGH);
-
-  digitalWrite(R2, HIGH);
-
-  digitalWrite(R3, HIGH);
-
-  digitalWrite(Y4, HIGH);
-
-  delay(yellowTime);
+  delay(300);
 
 }
----
 
-## Code Summary
+int getLevel13() {
 
-The code works by turning on one lane at a time while keeping the other lanes red. Before switching to the next lane, the yellow light turns on for 4 seconds as a transition signal.
+  long far13 = readSensor(TRIG_FAR13, ECHO_FAR13);
 
-The smart part of the system is applied to Lanes. The potentiometer value controls how long Lanes stays green:
+  delay(80);
 
-- Low potentiometer value → 3 seconds
-- Medium potentiometer value → 5 seconds
-- High potentiometer value → 8 seconds
+  long near13 = readSensor(TRIG_NEAR13, ECHO_NEAR13);
 
-This simulates different traffic conditions and allows the system to respond dynamically.
+  if (far13 < threshold) return 2;
+
+  if (near13 < threshold) return 1;
+
+  return 0;
+
+}
+
+int getLevel24() {
+
+  long far24 = readSensor(TRIG_FAR24, ECHO_FAR24);
+
+  delay(80);
+
+  long near24 = readSensor(TRIG_NEAR24, ECHO_NEAR24);
+
+  if (far24 < threshold) return 2;
+
+  if (near24 < threshold) return 1;
+
+  return 0;
+
+}
+
+int timeFor(int L) {
+
+  if (L == 1) return 7000;
+
+  if (L == 2) return 12000;
+
+  return 0;
+
+}
+
+void allRed() {
+
+  digitalWrite(G13, LOW);
+
+  digitalWrite(Y13, LOW);
+
+  digitalWrite(R13, HIGH);
+
+  digitalWrite(G24, LOW);
+
+  digitalWrite(Y24, LOW);
+
+  digitalWrite(R24, HIGH);
+
+}
+
+void open13(int t) {
+
+  allRed();
+
+  digitalWrite(R13, LOW);
+
+  digitalWrite(G13, HIGH);
+
+  delay(t);
+
+  digitalWrite(G13, LOW);
+
+  digitalWrite(Y13, HIGH);
+
+  delay(2000);
+
+  digitalWrite(Y13, LOW);
+
+  digitalWrite(R13, HIGH);
+
+}
+
+void open24(int t) {
+
+  allRed();
+
+  digitalWrite(R24, LOW);
+
+  digitalWrite(G24, HIGH);
+
+  delay(t);
+
+  digitalWrite(G24, LOW);
+
+  digitalWrite(Y24, HIGH);
+
+  delay(2000);
+
+  digitalWrite(Y24, LOW);
+
+  digitalWrite(R24, HIGH);
+
+}
+
+## CONCLUSION
+This project successfully demonstrates a Smart Traffic Light System using Arduino Uno and ultrasonic sensors. Unlike traditional traffic light systems with fixed timing, the developed system dynamically adjusts the traffic signal duration according to real-time traffic density.
+The use of near and far ultrasonic sensors allowed the system to distinguish between normal traffic and traffic congestion, providing longer green light duration for congested roads and shorter duration for normal traffic conditions.
+The project also implemented a fairness mechanism using the variable lastServed to prevent one road from repeatedly receiving priority. Overall, the system improved traffic flow efficiency, reduced unnecessary waiting time, and provided a simple, low-cost, and effective smart traffic management solution.
+
+
  
